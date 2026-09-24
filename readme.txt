@@ -4,7 +4,7 @@ Tags: booking, forms, paystack, dispute resolution
 Requires at least: 5.8
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 
 One shortcode that runs the full "Submit a Dispute" flow: intake form → pick a consultation
@@ -62,6 +62,10 @@ time → pay the consultation fee via Paystack → booking confirmed.
   page once `MRB_UPDATE_REPO` is pointed at your repo.
 
 == Changelog ==
+
+= 1.2.0 =
+* Added colour settings (Dispute Bookings → Settings → Colours) for buttons, day/time slots, text, fields and borders.
+* Fixed day/time buttons showing white text on a white background with some themes.
 
 = 1.1.0 =
 * Added GitHub-based update checking (Plugin Update Checker) — see UPDATING.md.

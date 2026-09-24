@@ -3,7 +3,7 @@
  * Plugin Name: Manage & Resolve — Dispute Intake & Booking
  * Plugin URI:  https://manageandresolve.com
  * Description: The "Submit a Dispute" intake form, a consultation booking calendar, and Paystack payment collection — all in one flow, for manageandresolve.com.
- * Version:     1.1.0
+ * Version:     1.2.0
  * Author:      Manage & Resolve
  * Text Domain: mr-booking
  * Requires PHP: 7.4
@@ -11,7 +11,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // No direct access.
 
-define( 'MRB_VERSION', '1.1.0' );
+define( 'MRB_VERSION', '1.2.0' );
 define( 'MRB_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MRB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -79,7 +79,7 @@ final class MR_Booking_Plugin {
 	private function init_update_checker() {
 		$factory = '\\YahnisElsts\\PluginUpdateChecker\\v5\\PucFactory';
 		if ( ! class_exists( $factory ) ) return;
-		if ( strpos( MRB_UPDATE_REPO, 'Obisanya1' ) !== false ) return; // not configured yet
+		if ( strpos( MRB_UPDATE_REPO, 'YOUR-GITHUB-USERNAME' ) !== false ) return; // not configured yet
 
 		$update_checker = $factory::buildUpdateChecker(
 			MRB_UPDATE_REPO,
@@ -117,6 +117,7 @@ final class MR_Booking_Plugin {
 		if ( ! $post instanceof WP_Post || ! has_shortcode( $post->post_content, 'mr_dispute_booking' ) ) return;
 
 		wp_enqueue_style( 'mrb-form', MRB_URL . 'assets/css/booking-form.css', array(), MRB_VERSION );
+		wp_add_inline_style( 'mrb-form', MR_Settings::color_css() );
 		wp_enqueue_script( 'mrb-paystack', 'https://js.paystack.co/v1/inline.js', array(), null, true );
 		wp_enqueue_script( 'mrb-form', MRB_URL . 'assets/js/booking-form.js', array( 'mrb-paystack' ), MRB_VERSION, true );
 
@@ -132,6 +133,13 @@ final class MR_Booking_Plugin {
 	}
 
 	public function enqueue_admin_assets( $hook ) {
+		// Settings page hook is "<menu-label>_page_mrb-settings", so match on the page slug.
+		if ( substr( (string) $hook, -strlen( '_page_mrb-settings' ) ) === '_page_mrb-settings' ) {
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'wp-color-picker' );
+			wp_add_inline_script( 'wp-color-picker', 'jQuery(function($){ $(".mrb-color-field").wpColorPicker(); });' );
+		}
+
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		if ( ! $screen || strpos( (string) $screen->id, MR_CPT::POST_TYPE ) === false ) return;
 		wp_enqueue_style( 'mrb-admin', MRB_URL . 'assets/css/admin.css', array(), MRB_VERSION );

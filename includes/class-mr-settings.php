@@ -5,8 +5,44 @@ class MR_Settings {
 
 	const OPTION_KEY = 'mrb_settings';
 
-	public static function defaults() {
+	/**
+	 * Colour options shown on the settings page: setting key => [label, default, CSS variable, help text].
+	 */
+	public static function color_options() {
 		return array(
+			'color_primary'       => array( __( 'Main button colour', 'mr-booking' ), '#8F2D3B', '--mrb-primary', __( 'Continue / Pay buttons and the selected time.', 'mr-booking' ) ),
+			'color_primary_hover' => array( __( 'Main button hover colour', 'mr-booking' ), '#6E212C', '--mrb-primary-hover', __( 'Main buttons when the mouse is over them.', 'mr-booking' ) ),
+			'color_primary_text'  => array( __( 'Text on coloured buttons', 'mr-booking' ), '#FFFFFF', '--mrb-primary-text', __( 'Text on main buttons, the selected day/time and the active step.', 'mr-booking' ) ),
+			'color_accent'        => array( __( 'Accent colour', 'mr-booking' ), '#56181F', '--mrb-accent', __( 'Selected day, active step, Back button and the success heading.', 'mr-booking' ) ),
+			'color_slot_bg'       => array( __( 'Day / time button background', 'mr-booking' ), '#FFFFFF', '--mrb-slot-bg', __( 'Day and time buttons that are not selected.', 'mr-booking' ) ),
+			'color_slot_text'     => array( __( 'Day / time button text', 'mr-booking' ), '#221F1B', '--mrb-slot-text', __( 'Text on day and time buttons that are not selected.', 'mr-booking' ) ),
+			'color_text'          => array( __( 'Form text colour', 'mr-booking' ), '#221F1B', '--mrb-text', __( 'Labels, typed text and paragraphs.', 'mr-booking' ) ),
+			'color_muted_text'    => array( __( 'Hint text colour', 'mr-booking' ), '#6B6967', '--mrb-muted-text', __( 'Small hints and inactive steps.', 'mr-booking' ) ),
+			'color_field_bg'      => array( __( 'Input field background', 'mr-booking' ), '#FFFFFF', '--mrb-field-bg', '' ),
+			'color_border'        => array( __( 'Border colour', 'mr-booking' ), '#C4C7C9', '--mrb-border', __( 'Borders around fields and day/time buttons.', 'mr-booking' ) ),
+			'color_panel_bg'      => array( __( 'Summary box background', 'mr-booking' ), '#D3D6D8', '--mrb-panel-bg', __( 'Booking summary box and inactive steps.', 'mr-booking' ) ),
+		);
+	}
+
+	/**
+	 * The saved colours as CSS variables, printed right after booking-form.css.
+	 */
+	public static function color_css() {
+		$s    = self::get_settings();
+		$vars = '';
+		foreach ( self::color_options() as $key => $opt ) {
+			$color = sanitize_hex_color( $s[ $key ] ) ?: $opt[1];
+			$vars .= $opt[2] . ':' . $color . ';';
+		}
+		return '.mrb-wizard{' . $vars . '}';
+	}
+
+	public static function defaults() {
+		$colors = array();
+		foreach ( self::color_options() as $key => $opt ) {
+			$colors[ $key ] = $opt[1];
+		}
+		return $colors + array(
 			'paystack_public_key' => '',
 			'paystack_secret_key' => '',
 			'currency'            => 'NGN',
@@ -55,6 +91,9 @@ class MR_Settings {
 		$out['slot_minutes']        = (string) max( 15, absint( $input['slot_minutes'] ?? 45 ) );
 		$out['days_ahead']          = (string) max( 1, absint( $input['days_ahead'] ?? 14 ) );
 		$out['hold_minutes']        = (string) max( 5, absint( $input['hold_minutes'] ?? 15 ) );
+		foreach ( self::color_options() as $key => $opt ) {
+			$out[ $key ] = sanitize_hex_color( $input[ $key ] ?? '' ) ?: $opt[1];
+		}
 		return $out;
 	}
 
@@ -140,6 +179,20 @@ class MR_Settings {
 							<p class="description"><?php esc_html_e( 'How long a chosen slot is reserved while the client is on the payment step, before it releases back to the calendar.', 'mr-booking' ); ?></p>
 						</td>
 					</tr>
+				</table>
+
+				<h2><?php esc_html_e( 'Colours', 'mr-booking' ); ?></h2>
+				<p><?php esc_html_e( 'Colours used by the booking form on your site. The "Default" button in each picker restores the original colour.', 'mr-booking' ); ?></p>
+				<table class="form-table" role="presentation">
+					<?php foreach ( self::color_options() as $key => $opt ) : ?>
+					<tr>
+						<th><label for="mrb_<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $opt[0] ); ?></label></th>
+						<td>
+							<input type="text" class="mrb-color-field" id="mrb_<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( self::OPTION_KEY ); ?>[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $s[ $key ] ); ?>" data-default-color="<?php echo esc_attr( $opt[1] ); ?>">
+							<?php if ( $opt[3] ) : ?><p class="description"><?php echo esc_html( $opt[3] ); ?></p><?php endif; ?>
+						</td>
+					</tr>
+					<?php endforeach; ?>
 				</table>
 				<?php submit_button(); ?>
 			</form>

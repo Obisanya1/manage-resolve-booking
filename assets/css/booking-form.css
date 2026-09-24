@@ -1,11 +1,32 @@
-.mrb-wizard { max-width: 720px; font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif; color: #221F1B; }
-.mrb-steps { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
-.mrb-step-dot { font-size: 12.5px; font-weight: 700; color: #969695; padding: 8px 14px; border-radius: 100px; background: #D3D6D8; }
-.mrb-step-dot.is-active { color: #FFFFFF; background: #56181F; }
+/*
+ * Colours are CSS variables so they can be changed from Dispute Bookings → Settings.
+ * The values below are only fallbacks; the saved settings are printed inline after
+ * this file and override them.
+ */
+.mrb-wizard {
+	--mrb-primary: #8F2D3B;
+	--mrb-primary-hover: #6E212C;
+	--mrb-primary-text: #FFFFFF;
+	--mrb-accent: #56181F;
+	--mrb-text: #221F1B;
+	--mrb-muted-text: #6B6967;
+	--mrb-slot-bg: #FFFFFF;
+	--mrb-slot-text: #221F1B;
+	--mrb-field-bg: #FFFFFF;
+	--mrb-border: #C4C7C9;
+	--mrb-panel-bg: #D3D6D8;
 
-.mrb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.mrb-grid .mrb-full { grid-column: 1 / -1; }
-.mrb-wizard label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+	max-width: 720px;
+	font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+	color: var(--mrb-text);
+}
+.mrb-wizard .mrb-steps { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+.mrb-wizard .mrb-step-dot { font-size: 12.5px; font-weight: 700; color: var(--mrb-muted-text); padding: 8px 14px; border-radius: 100px; background: var(--mrb-panel-bg); }
+.mrb-wizard .mrb-step-dot.is-active { color: var(--mrb-primary-text); background: var(--mrb-accent); }
+
+.mrb-wizard .mrb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.mrb-wizard .mrb-grid .mrb-full { grid-column: 1 / -1; }
+.mrb-wizard label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--mrb-text); }
 .mrb-wizard input,
 .mrb-wizard select,
 .mrb-wizard textarea {
@@ -13,41 +34,68 @@
 	box-sizing: border-box;
 	padding: 12px 14px;
 	border-radius: 4px;
-	border: 1px solid #C4C7C9;
+	border: 1px solid var(--mrb-border);
 	font-size: 14px;
 	font-family: inherit;
 	margin-top: 2px;
-	background: #FFFFFF;
-	color: #221F1B;
+	background: var(--mrb-field-bg);
+	color: var(--mrb-text);
 }
 .mrb-wizard textarea { resize: vertical; }
-.mrb-hint { font-size: 12px; color: #6B6967; }
+.mrb-wizard .mrb-hint { font-size: 12px; color: var(--mrb-muted-text); }
 
-.mrb-btn { font-size: 15px; font-weight: 700; border-radius: 4px; padding: 14px 26px; border: none; cursor: pointer; font-family: inherit; }
-.mrb-btn-primary { background: #8F2D3B; color: #FFFFFF; margin-top: 20px; }
-.mrb-btn-primary:hover:not(:disabled) { background: #6E212C; }
-.mrb-btn-primary:disabled { opacity: .5; cursor: not-allowed; }
-.mrb-btn-ghost { background: transparent; color: #56181F; border: 1.5px solid #56181F; margin-top: 20px; }
-.mrb-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+/* Buttons: every state sets both background and text colour so theme button styles can't leak in. */
+.mrb-wizard .mrb-btn { font-size: 15px; font-weight: 700; border-radius: 4px; padding: 14px 26px; border: none; cursor: pointer; font-family: inherit; text-transform: none; text-shadow: none; box-shadow: none; }
+.mrb-wizard .mrb-btn-primary,
+.mrb-wizard .mrb-btn-primary:focus { background: var(--mrb-primary); color: var(--mrb-primary-text); margin-top: 20px; }
+.mrb-wizard .mrb-btn-primary:hover:not(:disabled) { background: var(--mrb-primary-hover); color: var(--mrb-primary-text); }
+.mrb-wizard .mrb-btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+.mrb-wizard .mrb-btn-ghost,
+.mrb-wizard .mrb-btn-ghost:focus { background: transparent; color: var(--mrb-accent); border: 1.5px solid var(--mrb-accent); margin-top: 20px; }
+.mrb-wizard .mrb-btn-ghost:hover { background: var(--mrb-accent); color: var(--mrb-primary-text); }
+.mrb-wizard .mrb-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 
-.mrb-error { color: #8F2D3B; font-size: 13px; font-weight: 600; min-height: 18px; margin: 10px 0 0; }
+.mrb-wizard .mrb-error { color: var(--mrb-primary); font-size: 13px; font-weight: 600; min-height: 18px; margin: 10px 0 0; }
 
-.mrb-days { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
-.mrb-day { padding: 10px 16px; border-radius: 6px; border: 1px solid #C4C7C9; background: #FFFFFF; cursor: pointer; font-size: 13px; font-family: inherit; }
-.mrb-day.is-active { background: #56181F; color: #FFFFFF; border-color: #56181F; }
+.mrb-wizard .mrb-days,
+.mrb-wizard .mrb-times { display: flex; gap: 8px; flex-wrap: wrap; }
+.mrb-wizard .mrb-days { margin-bottom: 18px; }
+.mrb-wizard .mrb-day,
+.mrb-wizard .mrb-time,
+.mrb-wizard .mrb-day:focus,
+.mrb-wizard .mrb-time:focus {
+	border-radius: 6px;
+	border: 1px solid var(--mrb-border);
+	background: var(--mrb-slot-bg);
+	color: var(--mrb-slot-text);
+	cursor: pointer;
+	font-size: 13px;
+	font-weight: 600;
+	font-family: inherit;
+	line-height: 1.2;
+	text-transform: none;
+	text-shadow: none;
+	box-shadow: none;
+}
+.mrb-wizard .mrb-day { padding: 10px 16px; }
+.mrb-wizard .mrb-time { padding: 10px 14px; }
+.mrb-wizard .mrb-day:hover,
+.mrb-wizard .mrb-time:hover { background: var(--mrb-slot-bg); color: var(--mrb-slot-text); border-color: var(--mrb-primary); }
+.mrb-wizard .mrb-day.is-active,
+.mrb-wizard .mrb-day.is-active:hover,
+.mrb-wizard .mrb-day.is-active:focus { background: var(--mrb-accent); color: var(--mrb-primary-text); border-color: var(--mrb-accent); }
+.mrb-wizard .mrb-time.is-active,
+.mrb-wizard .mrb-time.is-active:hover,
+.mrb-wizard .mrb-time.is-active:focus { background: var(--mrb-primary); color: var(--mrb-primary-text); border-color: var(--mrb-primary); }
 
-.mrb-times { display: flex; gap: 8px; flex-wrap: wrap; }
-.mrb-time { padding: 10px 14px; border-radius: 6px; border: 1px solid #C4C7C9; background: #FFFFFF; cursor: pointer; font-size: 13px; font-family: inherit; }
-.mrb-time.is-active { background: #8F2D3B; color: #FFFFFF; border-color: #8F2D3B; }
+.mrb-wizard .mrb-summary { background: var(--mrb-panel-bg); color: var(--mrb-text); border-radius: 8px; padding: 18px 20px; margin-bottom: 18px; }
+.mrb-wizard .mrb-summary-row { font-size: 14px; padding: 4px 0; }
 
-.mrb-summary { background: #D3D6D8; border-radius: 8px; padding: 18px 20px; margin-bottom: 18px; }
-.mrb-summary-row { font-size: 14px; padding: 4px 0; }
+.mrb-wizard .mrb-lede { font-size: 14.5px; line-height: 1.7; color: var(--mrb-text); }
 
-.mrb-lede { font-size: 14.5px; line-height: 1.7; color: #4A473F; }
-
-.mrb-success { text-align: center; padding: 40px 20px; }
-.mrb-success h3 { font-family: Georgia, 'Times New Roman', serif; color: #56181F; font-size: 24px; margin: 0 0 12px; }
+.mrb-wizard .mrb-success { text-align: center; padding: 40px 20px; }
+.mrb-wizard .mrb-success h3 { font-family: Georgia, 'Times New Roman', serif; color: var(--mrb-accent); font-size: 24px; margin: 0 0 12px; }
 
 @media (max-width: 640px) {
-	.mrb-grid { grid-template-columns: 1fr; }
+	.mrb-wizard .mrb-grid { grid-template-columns: 1fr; }
 }
