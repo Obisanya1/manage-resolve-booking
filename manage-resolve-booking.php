@@ -22,7 +22,7 @@ define( 'MRB_URL', plugin_dir_url( __FILE__ ) );
  * update notice to appear in wp-admin. See UPDATING.md in this plugin folder
  * for the full workflow.
  */
-define( 'MRB_UPDATE_REPO', 'https://github.com/YOUR-GITHUB-USERNAME/manage-resolve-booking/' );
+define( 'MRB_UPDATE_REPO', 'https://github.com/Obisanya1/manage-resolve-booking/' );
 
 require_once MRB_PATH . 'includes/class-mr-cpt.php';
 require_once MRB_PATH . 'includes/class-mr-settings.php';
@@ -79,7 +79,7 @@ final class MR_Booking_Plugin {
 	private function init_update_checker() {
 		$factory = '\\YahnisElsts\\PluginUpdateChecker\\v5\\PucFactory';
 		if ( ! class_exists( $factory ) ) return;
-		if ( strpos( MRB_UPDATE_REPO, 'YOUR-GITHUB-USERNAME' ) !== false ) return; // not configured yet
+		if ( strpos( MRB_UPDATE_REPO, 'Obisanya1' ) !== false ) return; // not configured yet
 
 		$update_checker = $factory::buildUpdateChecker(
 			MRB_UPDATE_REPO,
